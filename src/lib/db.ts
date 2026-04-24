@@ -11,26 +11,71 @@ export async function getSubscriptions(userId: string) {
     .eq('user_id', userId)
     .order('created_at', { ascending: false });
 
-  if (error) throw new Error(error.message || 'Failed to perform operation');
+  if (error) {
+    // If the table doesn't exist yet (schema cache miss), return empty instead of crashing
+    if (error.message?.includes('schema cache') || error.code === '42P01') {
+      console.warn('Subscriptions table not found — run the migration SQL in Supabase.');
+      return [] as Subscription[];
+    }
+    throw new Error(error.message || 'Failed to fetch subscriptions');
+  }
   return data as Subscription[];
 }
 
 export async function addSubscription(sub: Omit<Subscription, 'id' | 'created_at'>) {
+  // Clean the payload — remove undefined fields that could cause Supabase issues
+  const payload: Record<string, unknown> = {
+    user_id: sub.user_id,
+    name: sub.name,
+    amount: sub.amount,
+    category: sub.category,
+    billing_cycle: sub.billing_cycle,
+    next_billing_date: sub.next_billing_date,
+    color: sub.color,
+    status: sub.status || 'active',
+  };
+
+  // Only include optional fields if they have values
+  if (sub.description) payload.description = sub.description;
+  if (sub.logo_url) payload.logo_url = sub.logo_url;
+  if (sub.website) payload.website = sub.website;
+
   const { data, error } = await supabase
     .from('subscriptions')
-    .insert(sub)
+    .insert(payload)
     .select()
     .single();
 
-  if (error) throw new Error(error.message || 'Failed to perform operation');
-  // Auto-create a transaction for today
-  await supabase.from('transactions').insert({
-    user_id: sub.user_id,
-    subscription_id: data.id,
-    amount: sub.amount,
-    date: format(new Date(), 'yyyy-MM-dd'),
-    note: `First charge — ${sub.name}`,
-  });
+  if (error) {
+    // Handle missing table
+    if (error.message?.includes('schema cache') || error.code === '42P01') {
+      throw new Error('Database tables not set up yet. Please run the migration SQL in Supabase.');
+    }
+    // Parse common Supabase errors into user-friendly messages
+    if (error.code === '23505') {
+      throw new Error('A subscription with this name already exists.');
+    }
+    if (error.code === '42501') {
+      throw new Error('Permission denied. Please try signing out and back in.');
+    }
+    if (error.message?.includes('violates row-level security')) {
+      throw new Error('Permission denied. Please try signing out and back in.');
+    }
+    throw new Error(error.message || 'Failed to add subscription. Please try again.');
+  }
+
+  // Auto-create a transaction for today (non-blocking — don't fail the whole operation)
+  try {
+    await supabase.from('transactions').insert({
+      user_id: sub.user_id,
+      subscription_id: data.id,
+      amount: sub.amount,
+      date: format(new Date(), 'yyyy-MM-dd'),
+      note: `First charge — ${sub.name}`,
+    });
+  } catch (txnErr) {
+    console.warn('Transaction auto-creation failed (non-critical):', txnErr);
+  }
 
   return data as Subscription;
 }
@@ -43,13 +88,13 @@ export async function updateSubscription(id: string, updates: Partial<Subscripti
     .select()
     .single();
 
-  if (error) throw new Error(error.message || 'Failed to perform operation');
+  if (error) throw new Error(error.message || 'Failed to update subscription');
   return data as Subscription;
 }
 
 export async function deleteSubscription(id: string) {
   const { error } = await supabase.from('subscriptions').delete().eq('id', id);
-  if (error) throw new Error(error.message || 'Failed to perform operation');
+  if (error) throw new Error(error.message || 'Failed to delete subscription');
 }
 
 // ─── Transactions ─────────────────────────────────────────────────────────────
@@ -62,7 +107,13 @@ export async function getTransactions(userId: string, limit = 50) {
     .order('date', { ascending: false })
     .limit(limit);
 
-  if (error) throw new Error(error.message || 'Failed to perform operation');
+  if (error) {
+    if (error.message?.includes('schema cache') || error.code === '42P01') {
+      console.warn('Transactions table not found — run the migration SQL in Supabase.');
+      return [] as Transaction[];
+    }
+    throw new Error(error.message || 'Failed to fetch transactions');
+  }
   return data as (Transaction & { subscription: Pick<Subscription, 'name' | 'color' | 'category'> })[];
 }
 
@@ -95,9 +146,15 @@ export async function getProfile(userId: string) {
     .from('profiles')
     .select('*')
     .eq('id', userId)
-    .single();
+    .maybeSingle();
 
-  if (error) throw new Error(error.message || 'Failed to perform operation');
+  if (error) throw new Error(error.message || 'Failed to fetch profile');
+
+  // If no profile row exists (e.g. new OAuth user), return null and let caller handle it
+  if (!data) {
+    return null;
+  }
+
   return data;
 }
 
@@ -109,7 +166,7 @@ export async function updateProfile(userId: string, updates: Record<string, unkn
     .select()
     .single();
 
-  if (error) throw new Error(error.message || 'Failed to perform operation');
+  if (error) throw new Error(error.message || 'Failed to update profile');
   return data;
 }
 
@@ -120,21 +177,24 @@ export async function getPreferences(userId: string) {
     .from('preferences')
     .select('*')
     .eq('user_id', userId)
-    .single();
+    .maybeSingle();
 
-  if (error) throw new Error(error.message || 'Failed to perform operation');
+  // If there's a real error (not just "no rows"), throw it
+  if (error) throw new Error(error.message || 'Failed to fetch preferences');
+
+  // Return null if no preferences row exists (new user)
   return data;
 }
 
 export async function updatePreferences(userId: string, updates: Record<string, unknown>) {
+  // Use upsert so it works even if the preferences row doesn't exist yet
   const { data, error } = await supabase
     .from('preferences')
-    .update({ ...updates, updated_at: new Date().toISOString() })
-    .eq('user_id', userId)
+    .upsert({ user_id: userId, ...updates, updated_at: new Date().toISOString() }, { onConflict: 'user_id' })
     .select()
     .single();
 
-  if (error) throw new Error(error.message || 'Failed to perform operation');
+  if (error) throw new Error(error.message || 'Failed to update preferences');
   return data;
 }
 

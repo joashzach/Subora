@@ -40,12 +40,6 @@ const FEATURES = [
   },
 ];
 
-const STATS = [
-  { value: '2k+', label: 'Users' },
-  { value: '500+', label: 'Services' },
-  { value: '100%', label: 'Private' },
-];
-
 export default function LandingPage() {
   return (
     <div style={{ background: '#0a0a0a', color: '#ffffff', minHeight: '100vh' }}>
@@ -59,19 +53,12 @@ export default function LandingPage() {
         background: 'rgba(10,10,10,0.9)',
         backdropFilter: 'blur(8px)',
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <span style={{
-            fontFamily: "'Space Grotesk', sans-serif",
-            fontSize: '1.15rem', fontWeight: 700, letterSpacing: '-0.03em',
-          }}>
-            S<span style={{ color: '#666' }}>ubora</span>
-          </span>
-        </div>
+        <span className="brand-logo">Subora</span>
 
         <div style={{ display: 'flex', gap: 32, alignItems: 'center' }}>
           <Link href="/login" style={{
             fontSize: '0.8rem', color: '#888', fontWeight: 500,
-            fontFamily: "'Space Grotesk', sans-serif",
+            fontFamily: "var(--font-display)",
             letterSpacing: '0.04em',
           }}>Sign In</Link>
           <Link href="/signup" className="btn btn-primary" style={{
@@ -97,7 +84,7 @@ export default function LandingPage() {
           </Link>
           <Link href="/login" style={{
             fontSize: '0.8rem', color: '#888', fontWeight: 500,
-            fontFamily: "'Space Grotesk', sans-serif",
+            fontFamily: "var(--font-display)",
             letterSpacing: '0.08em', textTransform: 'uppercase' as const,
             display: 'inline-flex', alignItems: 'center', gap: 8,
           }}>
@@ -106,40 +93,12 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ─── Stats ─── */}
-      <section style={{
-        padding: '64px 48px',
-        borderTop: '1px solid rgba(255,255,255,0.08)',
-      }}>
-        <div style={{
-          maxWidth: 800, margin: '0 auto',
-          display: 'flex', justifyContent: 'center', gap: 80,
-          flexWrap: 'wrap',
-        }}>
-          {STATS.map(s => (
-            <div key={s.label} style={{ textAlign: 'center' }}>
-              <div style={{
-                fontSize: '2.5rem', fontWeight: 700,
-                fontFamily: "'Space Grotesk', sans-serif",
-                letterSpacing: '-0.03em', lineHeight: 1,
-              }}>{s.value}</div>
-              <div style={{
-                fontSize: '0.7rem', color: '#555',
-                fontWeight: 600, marginTop: 8,
-                textTransform: 'uppercase', letterSpacing: '0.15em',
-                fontFamily: "'Space Grotesk', sans-serif",
-              }}>{s.label}</div>
-            </div>
-          ))}
-        </div>
-      </section>
-
       {/* ─── Features ─── */}
       <section style={{ padding: '80px 48px', maxWidth: 1200, margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: 64 }}>
           <h2 style={{
             fontSize: '2.5rem', fontWeight: 700,
-            fontFamily: "'Space Grotesk', sans-serif",
+            fontFamily: "var(--font-display)",
             letterSpacing: '-0.03em', marginBottom: 16,
           }}>Built for clarity</h2>
           <p style={{
@@ -161,42 +120,12 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ─── CTA ─── */}
-      <section style={{ padding: '0 48px 100px', maxWidth: 900, margin: '0 auto' }}>
-        <div style={{
-          padding: '80px 48px', textAlign: 'center',
-          border: '1px solid rgba(255,255,255,0.08)',
-          background: '#0e0e0e',
-        }}>
-          <h2 style={{
-            fontSize: '2.25rem', fontWeight: 700,
-            fontFamily: "'Space Grotesk', sans-serif",
-            letterSpacing: '-0.03em', marginBottom: 20,
-          }}>Ready to save?</h2>
-          <p style={{
-            color: '#555', fontSize: '0.95rem', maxWidth: 420,
-            margin: '0 auto 40px', lineHeight: 1.7,
-          }}>
-            Join thousands who have optimized their spending. No credit card required.
-          </p>
-          <Link href="/signup" className="btn btn-primary btn-lg">
-            Create Free Account
-          </Link>
-        </div>
-      </section>
-
       {/* ─── Footer ─── */}
       <footer style={{
         borderTop: '1px solid rgba(255,255,255,0.08)',
         padding: '40px 48px', textAlign: 'center',
       }}>
-        <div style={{
-          fontFamily: "'Space Grotesk', sans-serif",
-          fontSize: '0.95rem', fontWeight: 700,
-          letterSpacing: '-0.02em', marginBottom: 12,
-        }}>
-          S<span style={{ color: '#555' }}>ubora</span>
-        </div>
+        <div className="brand-logo" style={{ marginBottom: 12 }}>Subora</div>
         <div style={{ color: '#333', fontSize: '0.75rem', letterSpacing: '0.05em' }}>
           &copy; {new Date().getFullYear()} Subora. All rights reserved.
         </div>

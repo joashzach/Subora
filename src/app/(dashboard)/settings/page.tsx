@@ -98,7 +98,7 @@ export default function SettingsPage() {
     if (!confirm('Are you absolutely sure? This cannot be undone.')) return;
     await supabase.auth.signOut();
     setUser(null);
-    window.location.href = '/login';
+    window.location.href = '/';
   }
 
   return (
@@ -383,7 +383,7 @@ export default function SettingsPage() {
                 className="btn btn-secondary"
                 onClick={async () => {
                   await supabase.auth.signOut({ scope: 'global' });
-                  window.location.href = '/login';
+                  window.location.href = '/';
                 }}
               >
                 Sign out of all devices

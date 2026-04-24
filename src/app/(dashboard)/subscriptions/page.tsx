@@ -24,9 +24,14 @@ export default function SubscriptionsPage() {
 
   const loadData = useCallback(async () => {
     if (!user?.id) return;
-    const subs = await getSubscriptions(user.id);
-    setSubscriptions(subs);
-    setLoading(false);
+    try {
+      const subs = await getSubscriptions(user.id);
+      setSubscriptions(subs);
+    } catch (err) {
+      console.error('Error loading subscriptions:', err);
+    } finally {
+      setLoading(false);
+    }
   }, [user?.id, setSubscriptions]);
 
   useEffect(() => { loadData(); }, [loadData]);

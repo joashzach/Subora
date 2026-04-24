@@ -43,12 +43,7 @@ export default function SignupPage() {
     <div className="auth-bg">
       <div className="auth-card">
         <div className="auth-logo">
-          <span style={{
-            fontFamily: "'Space Grotesk', sans-serif",
-            fontSize: '1.25rem', fontWeight: 700, letterSpacing: '-0.03em',
-          }}>
-            S<span style={{ color: '#666' }}>ubora</span>
-          </span>
+          <span className="brand-logo brand-logo-lg">Subora</span>
         </div>
 
         <h1 style={{
