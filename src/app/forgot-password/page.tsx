@@ -30,32 +30,40 @@ export default function ForgotPasswordPage() {
     <div className="auth-bg">
       <div className="auth-card">
         <div className="auth-logo">
-          <div className="sidebar-logo-mark" style={{ width: 38, height: 38 }}>💳</div>
-          <span style={{ fontSize: '1.25rem', fontWeight: 800, letterSpacing: '-0.02em' }}>
-            Sub<span style={{ color: 'var(--accent)' }}>ora</span>
+          <span style={{
+            fontFamily: "'Space Grotesk', sans-serif",
+            fontSize: '1.25rem', fontWeight: 700, letterSpacing: '-0.03em',
+          }}>
+            S<span style={{ color: '#666' }}>ubora</span>
           </span>
         </div>
 
-        <h1 style={{ fontSize: '1.5rem', marginBottom: 6 }}>Reset password</h1>
+        <h1 style={{
+          fontSize: '1.35rem', marginBottom: 6,
+          fontFamily: "'Space Grotesk', sans-serif",
+          fontWeight: 700, letterSpacing: '-0.02em',
+        }}>Reset password</h1>
         <p className="text-secondary text-sm" style={{ marginBottom: 24 }}>
           Enter your email and we&apos;ll send a reset link
         </p>
 
         {sent ? (
           <div style={{
-            background: 'var(--success-bg)', border: '1px solid rgba(16,185,129,0.3)',
-            borderRadius: 10, padding: '20px', textAlign: 'center', color: 'var(--success)'
+            background: 'var(--success-bg)', border: '1px solid rgba(34,197,94,0.3)',
+            borderRadius: 4, padding: '20px', textAlign: 'center', color: 'var(--success)'
           }}>
-            <div style={{ fontSize: '2rem', marginBottom: 8 }}>📧</div>
-            <div style={{ fontWeight: 600 }}>Check your email!</div>
-            <div style={{ fontSize: '0.875rem', marginTop: 4, opacity: 0.8 }}>
+            <div style={{ fontWeight: 600, marginBottom: 4 }}>Check your email</div>
+            <div style={{ fontSize: '0.875rem', opacity: 0.8 }}>
               We sent a reset link to {email}
             </div>
           </div>
         ) : (
           <form onSubmit={handleReset} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
             {error && (
-              <div style={{ background: 'var(--danger-bg)', borderRadius: 8, padding: '10px 14px', fontSize: '0.875rem', color: 'var(--danger)' }}>
+              <div style={{
+                background: 'var(--danger-bg)', borderRadius: 4,
+                padding: '10px 14px', fontSize: '0.875rem', color: 'var(--danger)'
+              }}>
                 {error}
               </div>
             )}
@@ -72,7 +80,7 @@ export default function ForgotPasswordPage() {
         )}
 
         <p className="text-sm text-secondary" style={{ textAlign: 'center', marginTop: 20 }}>
-          <Link href="/login" style={{ color: 'var(--accent)', fontWeight: 600 }}>← Back to sign in</Link>
+          <Link href="/login" style={{ color: '#fff', fontWeight: 600 }}>Back to sign in</Link>
         </p>
       </div>
     </div>

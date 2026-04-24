@@ -9,14 +9,29 @@ import { useStore } from '@/store/useStore';
 import { getProfile } from '@/lib/db';
 
 const NAV_ITEMS = [
-  { href: '/dashboard', icon: '⊞', label: 'Dashboard' },
-  { href: '/subscriptions', icon: '📋', label: 'Subscriptions' },
-  { href: '/analytics', icon: '📊', label: 'Analytics' },
+  {
+    href: '/dashboard', label: 'Dashboard',
+    icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>,
+  },
+  {
+    href: '/subscriptions', label: 'Subscriptions',
+    icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="15" y2="16"/></svg>,
+  },
+  {
+    href: '/analytics', label: 'Analytics',
+    icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>,
+  },
 ];
 
 const SETTINGS_ITEMS = [
-  { href: '/profile', icon: '👤', label: 'Profile' },
-  { href: '/settings', icon: '⚙️', label: 'Settings' },
+  {
+    href: '/profile', label: 'Profile',
+    icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>,
+  },
+  {
+    href: '/settings', label: 'Settings',
+    icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>,
+  },
 ];
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -61,7 +76,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
         : theme);
       // Apply accent color
-      const color = accentColor || '#6366f1';
+      const color = accentColor || '#ffffff';
       document.documentElement.style.setProperty('--accent', color);
       const hex = color.replace('#', '');
       const r = parseInt(hex.substring(0, 2), 16);
@@ -73,11 +88,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   if (!mounted || loading) {
     return (
-      <div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg)' }}>
-        <div className="spinner" style={{ width: 40, height: 40, border: '3px solid var(--accent)', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
-        <style jsx>{`
-          @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        `}</style>
+      <div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0a0a0a' }}>
+        <div style={{ width: 24, height: 24, border: '2px solid #333', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 0.7s linear infinite' }} />
       </div>
     );
   }
@@ -98,8 +110,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <aside className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
         {/* Logo */}
         <div className="sidebar-logo">
-          <div className="sidebar-logo-mark">💳</div>
-          <span className="sidebar-logo-text">Sub<span>ora</span></span>
+          <span style={{
+            fontFamily: "'Space Grotesk', sans-serif",
+            fontSize: '1.15rem', fontWeight: 700, letterSpacing: '-0.03em',
+          }}>
+            S<span style={{ color: '#555' }}>ubora</span>
+          </span>
         </div>
 
         {/* Nav */}
@@ -112,7 +128,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               className={`nav-item ${pathname === item.href ? 'active' : ''}`}
               onClick={() => setSidebarOpen(false)}
             >
-              <span style={{ fontSize: '1.25rem' }}>{item.icon}</span>
+              {item.icon}
               {item.label}
             </Link>
           ))}
@@ -125,7 +141,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               className={`nav-item ${pathname === item.href ? 'active' : ''}`}
               onClick={() => setSidebarOpen(false)}
             >
-              <span style={{ fontSize: '1.25rem' }}>{item.icon}</span>
+              {item.icon}
               {item.label}
             </Link>
           ))}
@@ -137,26 +153,32 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, overflow: 'hidden' }}>
               {user?.avatar_url ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={user.avatar_url} alt="avatar" className="avatar" style={{ width: 36, height: 36 }} />
+                <img src={user.avatar_url} alt="avatar" className="avatar" style={{ width: 32, height: 32, borderRadius: '50%' }} />
               ) : (
-                <div className="avatar-placeholder" style={{ width: 36, height: 36, fontSize: '0.8rem' }}>
+                <div style={{
+                  width: 32, height: 32, borderRadius: '50%',
+                  background: '#252525', border: '1px solid #333',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: '0.7rem', fontWeight: 700, color: '#999',
+                  fontFamily: "'Space Grotesk', sans-serif",
+                }}>
                   {initials}
                 </div>
               )}
               <div style={{ overflow: 'hidden' }}>
-                <div style={{ fontSize: '0.875rem', fontWeight: 700, lineHeight: 1.2, color: 'var(--text-primary)' }} className="truncate" >
+                <div style={{ fontSize: '0.8rem', fontWeight: 600, lineHeight: 1.2, color: '#fff' }} className="truncate">
                   {user?.name || 'User'}
                 </div>
-                <div className="text-xs text-muted truncate" style={{ opacity: 0.7 }}>{user?.email}</div>
+                <div className="text-xs truncate" style={{ color: '#555', fontSize: '0.7rem' }}>{user?.email}</div>
               </div>
             </div>
             <button
               className="btn-icon"
               onClick={handleLogout}
               title="Sign out"
-              style={{ flexShrink: 0, width: 32, height: 32 }}
+              style={{ flexShrink: 0, width: 28, height: 28 }}
             >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                 <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>
               </svg>
             </button>
@@ -178,18 +200,17 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           background: 'var(--surface)',
           position: 'sticky', top: 0, zIndex: 50
         }} className="mobile-topbar">
-          <button
-            className="btn-icon"
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+          <button className="btn-icon" onClick={() => setSidebarOpen(!sidebarOpen)}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
               <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
             </svg>
           </button>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <div className="sidebar-logo-mark" style={{ width: 24, height: 24, borderRadius: 6, fontSize: '0.7rem' }}>💳</div>
-            <span style={{ fontWeight: 800, fontSize: '1rem', letterSpacing: '-0.02em' }}>Sub<span style={{ color: 'var(--accent)' }}>ora</span></span>
-          </div>
+          <span style={{
+            fontFamily: "'Space Grotesk', sans-serif",
+            fontWeight: 700, fontSize: '1rem', letterSpacing: '-0.02em'
+          }}>
+            S<span style={{ color: '#555' }}>ubora</span>
+          </span>
         </div>
 
         <div className="page-wrapper">
