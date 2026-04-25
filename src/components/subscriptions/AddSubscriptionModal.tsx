@@ -17,7 +17,7 @@ const CATEGORIES = ['entertainment', 'music', 'productivity', 'gaming', 'fitness
 
 export default function AddSubscriptionModal({ onClose, onAdded, initialData }: Props) {
   const { user } = useStore();
-  const currencyCode = user?.currency || 'USD';
+  const currencyCode = user?.currency || 'INR';
   const currencySymbol = CURRENCIES.find(c => c.code === currencyCode)?.symbol || '$';
 
   const branded = Object.keys(BRANDED_SERVICES);

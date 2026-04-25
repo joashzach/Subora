@@ -20,7 +20,7 @@ export default function AnalyticsPage() {
   const [timeRange, setTimeRange] = useState<TimeRange>('3m');
   const [categoryFilter, setCategoryFilter] = useState('all');
 
-  const currencySymbol = CURRENCY_SYMBOLS[user?.currency || 'USD'] || '$';
+  const currencySymbol = CURRENCY_SYMBOLS[user?.currency || 'INR'] || '₹';
 
   const monthsMap: Record<TimeRange, number> = { '30d': 1, '3m': 3, '1y': 12 };
 

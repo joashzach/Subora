@@ -55,7 +55,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             email: session.user.email!,
             name: session.user.user_metadata?.full_name || session.user.user_metadata?.name || session.user.email?.split('@')[0] || 'User',
             avatar_url: session.user.user_metadata?.avatar_url || session.user.user_metadata?.picture || undefined,
-            currency: 'USD',
+            currency: 'INR',
             theme_preference: 'dark'
           } as any);
         }
@@ -67,7 +67,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           email: session.user.email!,
           name: session.user.user_metadata?.full_name || session.user.user_metadata?.name || session.user.email?.split('@')[0] || 'User',
           avatar_url: session.user.user_metadata?.avatar_url || session.user.user_metadata?.picture || undefined,
-          currency: 'USD',
+          currency: 'INR',
           theme_preference: 'dark'
         } as any);
       } finally {

@@ -21,7 +21,7 @@ export default function SubscriptionsPage() {
   const [editSub, setEditSub] = useState<Subscription | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
-  const currencySymbol = CURRENCY_SYMBOLS[user?.currency || 'USD'] || '$';
+  const currencySymbol = CURRENCY_SYMBOLS[user?.currency || 'INR'] || '₹';
 
   const loadData = useCallback(async () => {
     if (!user?.id) return;

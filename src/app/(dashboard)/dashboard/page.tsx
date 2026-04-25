@@ -7,16 +7,14 @@ import { getSubscriptions, getTransactions, getMonthlySpend } from '@/lib/db';
 import { Subscription, Transaction } from '@/types';
 import { CURRENCY_SYMBOLS } from '@/lib/constants';
 import { format, parseISO, differenceInDays } from 'date-fns';
-import AddSubscriptionModal from '@/components/subscriptions/AddSubscriptionModal';
 import SubscriptionLogo from '@/components/subscriptions/SubscriptionLogo';
 
 export default function DashboardPage() {
   const { user, subscriptions, setSubscriptions, transactions, setTransactions, hideAmounts } = useStore();
   const [loading, setLoading] = useState(true);
-  const [showAddModal, setShowAddModal] = useState(false);
   const [monthlyData, setMonthlyData] = useState<{ month: string; total: number }[]>([]);
 
-  const currencySymbol = CURRENCY_SYMBOLS[user?.currency || 'USD'] || '$';
+  const currencySymbol = CURRENCY_SYMBOLS[user?.currency || 'INR'] || '₹';
 
   const loadData = useCallback(async () => {
     if (!user?.id) return;
@@ -106,12 +104,6 @@ export default function DashboardPage() {
           </h1>
           <p className="page-subtitle">Here&apos;s your subscription overview</p>
         </div>
-        <button className="btn btn-primary" id="btn-add-subscription" onClick={() => setShowAddModal(true)}>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-          </svg>
-          Add Subscription
-        </button>
       </div>
 
       {/* ─── Core Metrics ──────────────────────────────── */}
@@ -367,12 +359,7 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {showAddModal && (
-        <AddSubscriptionModal
-          onClose={() => setShowAddModal(false)}
-          onAdded={() => { setShowAddModal(false); loadData(); }}
-        />
-      )}
+
     </>
   );
 }
