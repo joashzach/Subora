@@ -16,10 +16,17 @@ export default function SettingsPage() {
       renewal_reminders: boolean;
       budget_alerts: boolean;
       ai_insights: boolean;
+      service_outages: boolean;
+      new_features: boolean;
       channels: { email: boolean; push: boolean; sms: boolean };
       reminder_days_before: number;
     };
-    privacy_settings: { hide_amounts: boolean; disable_bank_integration: boolean };
+    privacy_settings: { 
+      hide_amounts: boolean; 
+      disable_bank_integration: boolean;
+      anonymize_data: boolean;
+      track_usage: boolean;
+    };
     layout_preferences: { view_mode: string; dashboard_layout: string };
   } | null>(null);
   const [sessions, setSessions] = useState<Array<{ id: string; device_info: string; last_active: string; is_current: boolean }>>([]);
