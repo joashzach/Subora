@@ -4,8 +4,6 @@ A clean, modern subscription tracking web app that helps users **monitor, analyz
 
 ---
 
-## ✨ Features
-
 ### 📊 Dashboard (Instant Clarity)
 - Total monthly spend (primary metric)
 - % change vs last month
