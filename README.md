@@ -47,17 +47,6 @@ A clean, modern subscription tracking web app that helps users **monitor, analyz
 
 ---
 
-## 🎨 Design Principles
-
-- Minimal, professional UI (non “AI-generated” look)
-- Strong visual hierarchy
-- Consistent typography (Inter / SF Pro)
-- Card-based layout with soft shadows
-- Strict spacing system (8px grid)
-- Logo-first subscription recognition
-
----
-
 ## 🛠 Tech Stack (Suggested)
 
 - **Frontend:** React / Next.js  
@@ -78,10 +67,4 @@ A clean, modern subscription tracking web app that helps users **monitor, analyz
 
 ---
 
-## 📦 Installation
 
-```bash
-git clone https://github.com/your-username/subscription-tracker.git
-cd subscription-tracker
-npm install
-npm run dev
