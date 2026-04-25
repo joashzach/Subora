@@ -98,24 +98,41 @@ export default function AddSubscriptionModal({ onClose, onAdded, initialData }: 
           <div>
             <div className="form-label" style={{ marginBottom: 8 }}>Quick pick a service</div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-              {branded.map((b) => (
-                <button
-                  key={b}
-                  type="button"
-                  onClick={() => applyBrand(b)}
-                  style={{
-                    display: 'flex', alignItems: 'center', gap: 5,
-                    padding: '5px 10px', borderRadius: 8, border: '1px solid var(--border)',
-                    background: selectedBrand === b ? `${BRANDED_SERVICES[b].color}22` : 'var(--surface-2)',
-                    color: selectedBrand === b ? BRANDED_SERVICES[b].color : 'var(--text-secondary)',
-                    fontSize: '0.75rem', fontWeight: 500, cursor: 'pointer',
-                    borderColor: selectedBrand === b ? BRANDED_SERVICES[b].color : 'var(--border)',
-                    transition: 'all 0.15s'
-                  }}
-                >
-                  {BRANDED_SERVICES[b].icon} {b}
-                </button>
-              ))}
+              {branded.map((b) => {
+                const svc = BRANDED_SERVICES[b];
+                const faviconUrl = svc.website
+                  ? `https://www.google.com/s2/favicons?sz=32&domain=${new URL(svc.website).hostname}`
+                  : null;
+                return (
+                  <button
+                    key={b}
+                    type="button"
+                    onClick={() => applyBrand(b)}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: 6,
+                      padding: '5px 10px', borderRadius: 8, border: '1px solid var(--border)',
+                      background: selectedBrand === b ? `${svc.color}22` : 'var(--surface-2)',
+                      color: selectedBrand === b ? svc.color : 'var(--text-secondary)',
+                      fontSize: '0.75rem', fontWeight: 500, cursor: 'pointer',
+                      borderColor: selectedBrand === b ? svc.color : 'var(--border)',
+                      transition: 'all 0.15s'
+                    }}
+                  >
+                    {faviconUrl ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={faviconUrl}
+                        alt={b}
+                        width={14}
+                        height={14}
+                        style={{ borderRadius: 3, objectFit: 'contain' }}
+                        onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                      />
+                    ) : null}
+                    {b}
+                  </button>
+                );
+              })}
             </div>
           </div>
 

@@ -5,9 +5,10 @@ import { supabase } from '@/lib/supabase';
 import { useStore } from '@/store/useStore';
 import { getSubscriptions, getTransactions, getMonthlySpend } from '@/lib/db';
 import { Subscription, Transaction } from '@/types';
-import { CURRENCY_SYMBOLS, BRANDED_SERVICES } from '@/lib/constants';
-import { format, parseISO, differenceInDays, startOfMonth, endOfMonth, subDays } from 'date-fns';
+import { CURRENCY_SYMBOLS } from '@/lib/constants';
+import { format, parseISO, differenceInDays } from 'date-fns';
 import AddSubscriptionModal from '@/components/subscriptions/AddSubscriptionModal';
+import SubscriptionLogo from '@/components/subscriptions/SubscriptionLogo';
 
 export default function DashboardPage() {
   const { user, subscriptions, setSubscriptions, transactions, setTransactions, hideAmounts } = useStore();
@@ -162,17 +163,30 @@ export default function DashboardPage() {
           )}
         </div>
 
-        {/* Avg Per Sub */}
+        {/* % Change vs Last Month */}
         <div className="stat-card">
-          <span className="stat-label">Avg per Subscription</span>
+          <span className="stat-label">vs Last Month</span>
           {loading ? (
             <div className="skeleton" style={{ height: 36, width: '50%', borderRadius: 8 }} />
+          ) : monthOverMonthPct !== null ? (
+            <>
+              <div className="stat-value" style={{
+                color: monthOverMonthPct > 0 ? 'var(--danger)' : 'var(--success)',
+                fontSize: '2rem',
+              }}>
+                {monthOverMonthPct > 0 ? '+' : ''}{maskAmount(monthOverMonthPct.toFixed(1))}%
+              </div>
+              <div className="text-xs" style={{
+                color: monthOverMonthPct > 0 ? 'var(--danger)' : 'var(--success)',
+                fontWeight: 600,
+              }}>
+                {monthOverMonthPct > 0 ? '↑ Spending increased' : '↓ Spending decreased'}
+              </div>
+            </>
           ) : (
             <>
-              <div className="stat-value">
-                {currencySymbol}{maskAmount(active.length > 0 ? (monthlyTotal / active.length).toFixed(2) : '0.00')}
-              </div>
-              <div className="text-xs text-muted">per month</div>
+              <div className="stat-value" style={{ fontSize: '2rem', color: 'var(--text-muted)' }}>—</div>
+              <div className="text-xs text-muted">Not enough data yet</div>
             </>
           )}
         </div>
@@ -231,7 +245,6 @@ export default function DashboardPage() {
               <div style={{ padding: '0 16px' }}>
                 {upcoming.map((sub, i) => {
                   const days = differenceInDays(parseISO(sub.next_billing_date), now);
-                  const icon = BRANDED_SERVICES[sub.name]?.icon || '📦';
                   const isUrgent = days <= 3;
                   return (
                     <div key={sub.id} style={{
@@ -239,13 +252,9 @@ export default function DashboardPage() {
                       padding: '14px 0',
                       borderBottom: i < upcoming.length - 1 ? '1px solid var(--border)' : 'none',
                     }}>
-                      <div style={{
-                        width: 40, height: 40, borderRadius: 10,
-                        background: `${sub.color}18`,
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        fontSize: '1.1rem', flexShrink: 0,
-                        border: isUrgent ? '1.5px solid var(--danger)' : '1px solid transparent',
-                      }}>{icon}</div>
+                      <div style={{ outline: isUrgent ? '1.5px solid var(--danger)' : '1px solid transparent', borderRadius: 11 }}>
+                        <SubscriptionLogo name={sub.name} logoUrl={sub.logo_url} website={sub.website} color={sub.color} size={40} radius={10} />
+                      </div>
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <div className="font-semibold text-sm">{sub.name}</div>
                         <div className="text-xs" style={{
@@ -297,19 +306,17 @@ export default function DashboardPage() {
                 <div style={{ padding: '0 14px' }}>
                   {transactions.slice(0, 5).map((txn, i) => {
                     const sub = subscriptions.find(s => s.id === txn.subscription_id);
-                    const icon = sub ? (BRANDED_SERVICES[sub.name]?.icon || '💳') : '💳';
                     return (
                       <div key={txn.id} style={{
                         display: 'flex', alignItems: 'center', gap: 10,
                         padding: '10px 0',
                         borderBottom: i < Math.min(transactions.length, 5) - 1 ? '1px solid var(--border)' : 'none',
                       }}>
-                        <div style={{
-                          width: 32, height: 32, borderRadius: 8,
-                          background: sub?.color ? `${sub.color}18` : 'var(--surface-2)',
-                          display: 'flex', alignItems: 'center', justifyContent: 'center',
-                          fontSize: '0.9rem', flexShrink: 0,
-                        }}>{icon}</div>
+                        {sub ? (
+                          <SubscriptionLogo name={sub.name} logoUrl={sub.logo_url} website={sub.website} color={sub.color} size={32} radius={8} />
+                        ) : (
+                          <div style={{ width: 32, height: 32, borderRadius: 8, background: 'var(--surface-2)', flexShrink: 0 }} />
+                        )}
                         <div style={{ flex: 1, minWidth: 0 }}>
                           <div className="font-semibold" style={{ fontSize: '0.8125rem' }}>{sub?.name || txn.note || 'Unknown'}</div>
                           <div className="text-xs text-muted">{format(parseISO(txn.date), 'MMM d')}</div>
@@ -339,19 +346,13 @@ export default function DashboardPage() {
                   <p className="text-sm text-muted">No active subscriptions</p>
                 </div>
               ) : active.slice(0, 5).map((sub) => {
-                const icon = BRANDED_SERVICES[sub.name]?.icon || '📦';
                 return (
                   <div key={sub.id} style={{
                     display: 'flex', alignItems: 'center', gap: 10,
                     background: 'var(--surface)', border: '1px solid var(--border)',
                     borderRadius: 10, padding: '8px 12px',
                   }}>
-                    <div style={{
-                      width: 30, height: 30, borderRadius: 8,
-                      background: `${sub.color}18`,
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      fontSize: '0.85rem', flexShrink: 0,
-                    }}>{icon}</div>
+                    <SubscriptionLogo name={sub.name} logoUrl={sub.logo_url} website={sub.website} color={sub.color} size={30} radius={8} />
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div className="font-semibold truncate" style={{ fontSize: '0.8125rem' }}>{sub.name}</div>
                     </div>

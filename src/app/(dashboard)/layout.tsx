@@ -42,13 +42,19 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       try {
         const profile = await getProfile(session.user.id);
         if (profile) {
-          setUser({ ...profile, email: session.user.email! });
+          setUser({
+            ...profile,
+            email: session.user.email!,
+            // Prefer DB avatar; fall back to OAuth provider picture
+            avatar_url: profile.avatar_url || session.user.user_metadata?.avatar_url || session.user.user_metadata?.picture || undefined,
+          });
         } else {
           // New user — no profile row yet
           setUser({
             id: session.user.id,
             email: session.user.email!,
-            name: session.user.user_metadata?.name || session.user.email?.split('@')[0] || 'User',
+            name: session.user.user_metadata?.full_name || session.user.user_metadata?.name || session.user.email?.split('@')[0] || 'User',
+            avatar_url: session.user.user_metadata?.avatar_url || session.user.user_metadata?.picture || undefined,
             currency: 'USD',
             theme_preference: 'dark'
           } as any);
@@ -59,7 +65,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         setUser({
           id: session.user.id,
           email: session.user.email!,
-          name: session.user.user_metadata?.name || session.user.email?.split('@')[0] || 'User',
+          name: session.user.user_metadata?.full_name || session.user.user_metadata?.name || session.user.email?.split('@')[0] || 'User',
+          avatar_url: session.user.user_metadata?.avatar_url || session.user.user_metadata?.picture || undefined,
           currency: 'USD',
           theme_preference: 'dark'
         } as any);

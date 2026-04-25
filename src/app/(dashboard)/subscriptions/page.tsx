@@ -4,9 +4,10 @@ import { useEffect, useState, useCallback } from 'react';
 import { useStore } from '@/store/useStore';
 import { getSubscriptions, deleteSubscription, updateSubscription } from '@/lib/db';
 import { Subscription } from '@/types';
-import { BRANDED_SERVICES, CATEGORY_COLORS, CURRENCY_SYMBOLS } from '@/lib/constants';
+import { CATEGORY_COLORS, CURRENCY_SYMBOLS } from '@/lib/constants';
 import { format, parseISO } from 'date-fns';
 import AddSubscriptionModal from '@/components/subscriptions/AddSubscriptionModal';
+import SubscriptionLogo from '@/components/subscriptions/SubscriptionLogo';
 
 const CATEGORIES = ['all', 'entertainment', 'music', 'productivity', 'gaming', 'fitness', 'news', 'shopping', 'cloud', 'education', 'other'];
 
@@ -208,7 +209,6 @@ function SubCard({ sub, currencySymbol, hideAmounts, onEdit, onDelete, onToggle,
   sub: Subscription; currencySymbol: string; hideAmounts: boolean;
   onEdit: () => void; onDelete: () => void; onToggle: () => void; deleting: boolean;
 }) {
-  const icon = BRANDED_SERVICES[sub.name]?.icon || '📦';
   const monthlyAmount = sub.billing_cycle === 'monthly' ? sub.amount
     : sub.billing_cycle === 'yearly' ? sub.amount / 12
     : sub.amount * 4.33;
@@ -216,8 +216,15 @@ function SubCard({ sub, currencySymbol, hideAmounts, onEdit, onDelete, onToggle,
   return (
     <div className="sub-card" style={{ '--sub-color': sub.color } as React.CSSProperties}>
       <div className="sub-card-header">
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <div className="sub-logo" style={{ background: `${sub.color}22` }}>{icon}</div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <SubscriptionLogo
+            name={sub.name}
+            logoUrl={sub.logo_url}
+            website={sub.website}
+            color={sub.color}
+            size={44}
+            radius={10}
+          />
           <div>
             <div className="sub-name">{sub.name}</div>
             <div className="sub-category" style={{ color: CATEGORY_COLORS[sub.category] }}>
@@ -229,12 +236,14 @@ function SubCard({ sub, currencySymbol, hideAmounts, onEdit, onDelete, onToggle,
       </div>
 
       <div>
-        <div className="sub-amount" style={{ color: sub.color }}>
-          {currencySymbol}{hideAmounts ? '••••' : Number(sub.amount).toFixed(2)}
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
+          <div className="sub-amount" style={{ color: sub.color }}>
+            {currencySymbol}{hideAmounts ? '••••' : Number(sub.amount).toFixed(2)}
+          </div>
+          <div className="sub-cycle">/{sub.billing_cycle}</div>
         </div>
-        <div className="sub-cycle">/{sub.billing_cycle}</div>
         {sub.billing_cycle !== 'monthly' && (
-          <div className="text-xs text-muted" style={{ marginTop: 2 }}>
+          <div className="text-xs text-muted" style={{ marginTop: 2, fontFamily: 'var(--font-body)' }}>
             ≈ {currencySymbol}{hideAmounts ? '••••' : monthlyAmount.toFixed(2)}/mo
           </div>
         )}
@@ -250,14 +259,40 @@ function SubCard({ sub, currencySymbol, hideAmounts, onEdit, onDelete, onToggle,
           {format(parseISO(sub.next_billing_date), 'MMM d, yyyy')}
         </div>
         <div style={{ display: 'flex', gap: 4 }}>
-          <button className="btn-icon" onClick={onEdit} title="Edit" style={{ width: 28, height: 28, fontSize: '0.7rem' }}>✏️</button>
-          <button className="btn-icon" onClick={onToggle} title={sub.status === 'active' ? 'Pause' : 'Activate'}
-            style={{ width: 28, height: 28, fontSize: '0.7rem' }}>
-            {sub.status === 'active' ? '⏸️' : '▶️'}
+          <button
+            className="btn-icon" onClick={onEdit} title="Edit"
+            style={{ width: 28, height: 28 }}
+          >
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
           </button>
-          <button className="btn-icon" onClick={onDelete} disabled={deleting}
-            style={{ width: 28, height: 28, fontSize: '0.7rem', color: 'var(--danger)' }}>
-            {deleting ? <span className="spinner" style={{ width: 12, height: 12 }} /> : '🗑️'}
+          <button
+            className="btn-icon" onClick={onToggle}
+            title={sub.status === 'active' ? 'Pause' : 'Activate'}
+            style={{ width: 28, height: 28 }}
+          >
+            {sub.status === 'active' ? (
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>
+              </svg>
+            ) : (
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <polygon points="5 3 19 12 5 21 5 3"/>
+              </svg>
+            )}
+          </button>
+          <button
+            className="btn-icon" onClick={onDelete} disabled={deleting}
+            style={{ width: 28, height: 28, color: 'var(--danger)' }}
+          >
+            {deleting ? <span className="spinner" style={{ width: 12, height: 12 }} /> : (
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                <path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/>
+              </svg>
+            )}
           </button>
         </div>
       </div>
@@ -269,27 +304,52 @@ function SubListItem({ sub, currencySymbol, hideAmounts, onEdit, onDelete, onTog
   sub: Subscription; currencySymbol: string; hideAmounts: boolean;
   onEdit: () => void; onDelete: () => void; onToggle: () => void;
 }) {
-  const icon = BRANDED_SERVICES[sub.name]?.icon || '📦';
   return (
     <div className="sub-list-item">
-      <div style={{ width: 40, height: 40, borderRadius: 10, background: `${sub.color}22`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.1rem', flexShrink: 0 }}>
-        {icon}
-      </div>
+      <SubscriptionLogo
+        name={sub.name}
+        logoUrl={sub.logo_url}
+        website={sub.website}
+        color={sub.color}
+        size={40}
+        radius={10}
+      />
       <div style={{ flex: 1, minWidth: 0 }}>
-        <div className="font-semibold">{sub.name}</div>
-        <div className="text-xs text-muted">{sub.category} · {format(parseISO(sub.next_billing_date), 'MMM d')}</div>
+        <div style={{ fontWeight: 700, fontSize: '0.9375rem', fontFamily: 'var(--font-display)', letterSpacing: '-0.01em' }}>{sub.name}</div>
+        <div className="text-xs" style={{ color: CATEGORY_COLORS[sub.category], fontWeight: 600, marginTop: 2 }}>
+          {sub.category}
+          <span style={{ color: 'var(--text-muted)', fontWeight: 400 }}> · {format(parseISO(sub.next_billing_date), 'MMM d')}</span>
+        </div>
       </div>
       <span className={`badge badge-${sub.status}`}>{sub.status}</span>
-      <div style={{ fontWeight: 800, fontSize: '1rem', color: sub.color, minWidth: 80, textAlign: 'right' }}>
+      <div style={{ fontWeight: 800, fontSize: '1rem', color: sub.color, minWidth: 80, textAlign: 'right', fontFamily: 'var(--font-display)' }}>
         {currencySymbol}{hideAmounts ? '••••' : Number(sub.amount).toFixed(2)}
-        <div className="text-xs text-muted" style={{ fontWeight: 400 }}>/{sub.billing_cycle}</div>
+        <div className="text-xs" style={{ fontWeight: 400, color: 'var(--text-muted)', fontFamily: 'var(--font-body)' }}>/{sub.billing_cycle}</div>
       </div>
       <div style={{ display: 'flex', gap: 4, marginLeft: 8 }}>
-        <button className="btn-icon" onClick={onEdit} style={{ width: 30, height: 30, fontSize: '0.7rem' }}>✏️</button>
-        <button className="btn-icon" onClick={onToggle} style={{ width: 30, height: 30, fontSize: '0.7rem' }}>
-          {sub.status === 'active' ? '⏸️' : '▶️'}
+        <button className="btn-icon" onClick={onEdit} style={{ width: 30, height: 30 }} title="Edit">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+          </svg>
         </button>
-        <button className="btn-icon" onClick={onDelete} style={{ width: 30, height: 30, fontSize: '0.7rem', color: 'var(--danger)' }}>🗑️</button>
+        <button className="btn-icon" onClick={onToggle} style={{ width: 30, height: 30 }} title={sub.status === 'active' ? 'Pause' : 'Activate'}>
+          {sub.status === 'active' ? (
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>
+            </svg>
+          ) : (
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <polygon points="5 3 19 12 5 21 5 3"/>
+            </svg>
+          )}
+        </button>
+        <button className="btn-icon" onClick={onDelete} style={{ width: 30, height: 30, color: 'var(--danger)' }} title="Delete">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+            <path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/>
+          </svg>
+        </button>
       </div>
     </div>
   );
