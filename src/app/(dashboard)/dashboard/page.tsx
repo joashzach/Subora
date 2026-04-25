@@ -107,7 +107,7 @@ export default function DashboardPage() {
       </div>
 
       {/* ─── Core Metrics ──────────────────────────────── */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16, marginBottom: 24 }}>
+      <div className="dash-stats" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16, marginBottom: 24 }}>
         {/* Monthly Spend — PRIMARY */}
         <div className="stat-card" style={{ gridColumn: '1 / 2', position: 'relative' }}>
           <span className="stat-label">Monthly Spend</span>
@@ -206,7 +206,7 @@ export default function DashboardPage() {
         </div>
       )}
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 360px', gap: 20 }}>
+      <div className="dash-main" style={{ display: 'grid', gridTemplateColumns: '1fr 360px', gap: 20 }}>
         {/* ─── Left: Upcoming Payments (Primary) ────── */}
         <div>
           <div className="section-header">

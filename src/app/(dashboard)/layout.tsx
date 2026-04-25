@@ -224,24 +224,60 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       {/* Main */}
       <main className="main-content">
         {/* Mobile top bar */}
-        <div style={{
-          display: 'none', alignItems: 'center', gap: 12,
-          padding: '16px', borderBottom: '1px solid var(--border)',
-          background: 'var(--surface)',
-          position: 'sticky', top: 0, zIndex: 50
-        }} className="mobile-topbar">
-          <button className="btn-icon" onClick={() => setSidebarOpen(!sidebarOpen)}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+        <div className="mobile-topbar">
+          <button className="btn-icon" onClick={() => setSidebarOpen(!sidebarOpen)} style={{ border: 'none' }}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
               <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
             </svg>
           </button>
           <span className="brand-logo brand-logo-sm">Subora</span>
+          {user?.avatar_url ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={user.avatar_url} alt="avatar" style={{ width: 28, height: 28, borderRadius: '50%', marginLeft: 'auto', objectFit: 'cover' }} />
+          ) : (
+            <div style={{
+              width: 28, height: 28, borderRadius: '50%', marginLeft: 'auto',
+              background: '#252525', border: '1px solid #333',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: '0.65rem', fontWeight: 700, color: '#999',
+            }}>{initials}</div>
+          )}
         </div>
 
         <div className="page-wrapper">
           {children}
         </div>
       </main>
+
+      {/* Mobile bottom nav */}
+      <nav className="mobile-bottom-nav">
+        <Link href="/dashboard" className={`mobile-nav-item ${pathname === '/dashboard' ? 'active' : ''}`} onClick={() => setSidebarOpen(false)}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+            <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+          </svg>
+          <span>Dashboard</span>
+        </Link>
+        <Link href="/subscriptions" className={`mobile-nav-item ${pathname === '/subscriptions' ? 'active' : ''}`} onClick={() => setSidebarOpen(false)}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
+            <rect x="9" y="3" width="6" height="4" rx="1"/>
+          </svg>
+          <span>Subs</span>
+        </Link>
+        <Link href="/analytics" className={`mobile-nav-item ${pathname === '/analytics' ? 'active' : ''}`} onClick={() => setSidebarOpen(false)}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+          </svg>
+          <span>Analytics</span>
+        </Link>
+        <Link href="/profile" className={`mobile-nav-item ${pathname === '/profile' ? 'active' : ''}`} onClick={() => setSidebarOpen(false)}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+          </svg>
+          <span>Profile</span>
+        </Link>
+      </nav>
     </div>
   );
 }

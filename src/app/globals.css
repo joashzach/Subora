@@ -126,10 +126,158 @@ html {
   margin: 0 auto;
 }
 
-@media (max-width: 1024px) {
-  .main-content { margin-left: 0; }
-  .page-wrapper { padding: 24px 16px; }
+/* ─── Mobile Top Bar (hidden on desktop) ──────────────────────────────────── */
+.mobile-topbar {
+  display: none;
 }
+
+/* ─── Mobile Bottom Nav (hidden on desktop) ──────────────────────────────── */
+.mobile-bottom-nav {
+  display: none;
+}
+
+/* ─── Responsive ──────────────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  /* Sidebar slides off-screen; toggled with .open */
+  .sidebar {
+    transform: translateX(-100%);
+  }
+  .sidebar.open {
+    transform: translateX(0);
+    box-shadow: 8px 0 40px rgba(0,0,0,0.6);
+    z-index: 200;
+  }
+  .main-content {
+    margin-left: 0;
+  }
+  .page-wrapper {
+    padding: 20px 16px;
+  }
+
+  /* Show mobile topbar */
+  .mobile-topbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 16px;
+    height: 56px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Show bottom nav, add bottom padding to page so content isn't hidden */
+  .mobile-bottom-nav {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    z-index: 100;
+    padding: 0 8px;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .mobile-nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    color: var(--text-muted);
+    font-size: 0.65rem;
+    font-weight: 600;
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: var(--transition);
+    border-radius: var(--radius-sm);
+    padding: 6px 4px;
+  }
+  .mobile-nav-item.active {
+    color: var(--text-primary);
+  }
+  .mobile-nav-item svg {
+    transition: var(--transition);
+  }
+  .mobile-nav-item.active svg {
+    stroke: var(--text-primary);
+  }
+
+  /* Extra page bottom padding for bottom nav */
+  .page-wrapper {
+    padding: 16px 14px 80px;
+  }
+
+  /* Page header stacks on small screens */
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .page-header .btn { width: 100%; justify-content: center; }
+
+  /* Stat cards: 2 col on tablet, 1 col on phone */
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* Dashboard 3-col stat grid → 2 col */
+  .dash-stats { grid-template-columns: 1fr 1fr !important; }
+
+  /* Dashboard 2-col layout (upcoming + sidebar) → stacked */
+  .dash-main { grid-template-columns: 1fr !important; }
+
+  /* Analytics charts 2-col → stacked */
+  .analytics-grid { grid-template-columns: 1fr !important; }
+  .analytics-chart-full { grid-column: 1 !important; }
+  .chart-card { padding: 20px 16px; }
+
+  /* Filter bar wraps on mobile */
+  .filter-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .filter-bar .search-bar { max-width: 100%; }
+  .filter-bar select { width: 100% !important; }
+
+  /* Sub grid → 1 col */
+  .subs-grid { grid-template-columns: 1fr; }
+
+  /* Auth card full-width */
+  .auth-card { padding: 32px 24px; }
+  .auth-bg { padding: 16px; }
+
+  /* Section header */
+  .section-header { flex-direction: column; align-items: flex-start; gap: 4px; }
+
+  /* Modal fills screen on mobile */
+  .modal { max-width: 100%; border-radius: var(--radius) var(--radius) 0 0; }
+  .modal-overlay { align-items: flex-end; padding: 0; }
+
+  /* Subscription list item: hide badge on very small */
+  .sub-list-item { padding: 12px 14px; gap: 10px; }
+}
+
+@media (max-width: 480px) {
+  .stats-grid { grid-template-columns: 1fr; }
+  .dash-stats { grid-template-columns: 1fr !important; }
+  .page-title { font-size: 1.25rem; }
+  .stat-value { font-size: 1.75rem; }
+  /* Subs grid single-col already set; reduce padding more */
+  .page-wrapper { padding: 14px 12px 80px; }
+  /* Profile two-col form → single col */
+  .profile-form-grid { grid-template-columns: 1fr !important; }
+}
+
 
 /* ─── Cards ───────────────────────────────────────────────────────────────── */
 .card {

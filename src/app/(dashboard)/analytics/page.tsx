@@ -231,9 +231,9 @@ export default function AnalyticsPage() {
       </div>
 
       {/* ─── Charts Row ─────────────────────────────── */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 24 }}>
+      <div className="analytics-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 24 }}>
         {/* Spending Trend */}
-        <div className="chart-card" style={{ gridColumn: '1 / -1' }}>
+        <div className="chart-card analytics-chart-full" style={{ gridColumn: '1 / -1' }}>
           <div className="chart-header">
             <h3>Spending Trend</h3>
             <span className="text-sm text-muted">
