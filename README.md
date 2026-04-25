@@ -1,4 +1,4 @@
-# 💳 Subscription Tracker
+# 💳 Subora
 
 A clean, modern subscription tracking web app that helps users **monitor, analyze, and optimize recurring expenses**. Built with a focus on **minimal UI, clarity, and actionable insights**.
 
