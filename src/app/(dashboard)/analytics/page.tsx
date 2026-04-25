@@ -286,20 +286,46 @@ export default function AnalyticsPage() {
               </ResponsiveContainer>
 
               {/* Category Spend Summary */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 12 }}>
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
+                gap: 10,
+                marginTop: 20,
+                paddingTop: 16,
+                borderTop: '1px solid var(--border)'
+              }}>
                 {categoryData.map((cat) => (
-                  <div key={cat.name} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <div style={{
-                      width: 10, height: 10, borderRadius: 3, flexShrink: 0,
-                      background: CATEGORY_COLORS[cat.rawName] || '#555',
-                    }} />
-                    <span className="text-sm" style={{ flex: 1 }}>{cat.name}</span>
-                    <span className="text-sm font-semibold">
-                      {currencySymbol}{hideAmounts ? '••' : cat.value.toFixed(2)}
-                    </span>
-                    <span className="text-xs text-muted" style={{ width: 36, textAlign: 'right' }}>
-                      {monthlyTotal > 0 ? ((cat.value / monthlyTotal) * 100).toFixed(0) : 0}%
-                    </span>
+                  <div key={cat.name} style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 6,
+                    padding: '10px 14px',
+                    background: 'var(--surface-2)',
+                    borderRadius: 10,
+                    border: '1px solid var(--border)'
+                  }} className="category-item-card">
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <div style={{
+                        width: 10, height: 10, borderRadius: '50%', flexShrink: 0,
+                        background: CATEGORY_COLORS[cat.rawName] || '#555',
+                      }} />
+                      <span className="text-[10px] font-bold text-muted uppercase tracking-widest">{cat.name}</span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <span className="text-base font-bold family-display">
+                        {currencySymbol}{hideAmounts ? '••' : cat.value.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                      </span>
+                      <div style={{
+                        fontSize: '10px',
+                        padding: '2px 6px',
+                        background: 'rgba(255,255,255,0.05)',
+                        borderRadius: 4,
+                        color: 'var(--text-muted)',
+                        fontWeight: 600
+                      }}>
+                        {monthlyTotal > 0 ? ((cat.value / monthlyTotal) * 100).toFixed(0) : 0}%
+                      </div>
+                    </div>
                   </div>
                 ))}
               </div>

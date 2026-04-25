@@ -29,16 +29,33 @@ export default function SettingsPage() {
 
   useEffect(() => {
     if (!user?.id) return;
-    getPreferences(user.id).then(setPrefs).catch(() => {
-      // New user — preferences row may not exist yet
-      setPrefs({
-        notification_settings: {
-          renewal_reminders: true, budget_alerts: true, ai_insights: true,
-          channels: { email: true, push: false, sms: false }, reminder_days_before: 3,
-        },
-        privacy_settings: { hide_amounts: false, disable_bank_integration: false },
-        layout_preferences: { view_mode: 'grid', dashboard_layout: 'detailed' },
-      });
+    
+    // Set default prefs immediately so UI is never empty
+    const defaultPrefs = {
+      notification_settings: {
+        renewal_reminders: true, 
+        budget_alerts: true, 
+        ai_insights: true,
+        service_outages: false,
+        new_features: true,
+        channels: { email: true, push: false, sms: false }, 
+        reminder_days_before: 3,
+      },
+      privacy_settings: { 
+        hide_amounts: false, 
+        disable_bank_integration: false,
+        anonymize_data: false,
+        track_usage: true 
+      },
+      layout_preferences: { view_mode: 'grid', dashboard_layout: 'detailed' },
+    };
+    
+    setPrefs(defaultPrefs);
+
+    getPreferences(user.id).then((fetched) => {
+      if (fetched) setPrefs(prev => ({ ...prev, ...fetched }));
+    }).catch(() => {
+      console.warn('Preferences table might be missing or unreachable.');
     });
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) {
@@ -197,6 +214,8 @@ export default function SettingsPage() {
               { key: 'renewal_reminders', label: 'Renewal Reminders', desc: 'Get notified before subscriptions renew' },
               { key: 'budget_alerts', label: 'Budget Alerts', desc: 'Alerts when spending exceeds your budget' },
               { key: 'ai_insights', label: 'Spending Insights', desc: 'Smart tips based on your subscription data' },
+              { key: 'service_outages', label: 'Service Outages', desc: 'Alerts for major subscription service downtime' },
+              { key: 'new_features', label: 'Product Updates', desc: 'Be the first to know about new Subora features' },
             ].map((item) => (
               <div key={item.key} className="settings-row">
                 <div className="settings-row-info">
@@ -206,7 +225,7 @@ export default function SettingsPage() {
                 <label className="toggle">
                   <input
                     type="checkbox"
-                    checked={prefs.notification_settings[item.key as keyof typeof prefs.notification_settings] as boolean}
+                    checked={prefs.notification_settings[item.key as keyof typeof prefs.notification_settings] as boolean || false}
                     onChange={(e) => savePrefs({
                       notification_settings: {
                         ...prefs.notification_settings,
@@ -294,6 +313,38 @@ export default function SettingsPage() {
               <label className="toggle">
                 <input type="checkbox" checked={hideAmounts}
                   onChange={(e) => setHideAmounts(e.target.checked)} />
+                <div className="toggle-track" />
+                <div className="toggle-thumb" />
+              </label>
+            </div>
+
+            <div className="settings-row">
+              <div className="settings-row-info">
+                <div className="settings-row-label">Anonymize My Data</div>
+                <div className="settings-row-desc">Remove identifiable information from analytics</div>
+              </div>
+              <label className="toggle">
+                <input type="checkbox" 
+                  checked={prefs.privacy_settings.anonymize_data || false}
+                  onChange={(e) => savePrefs({
+                    privacy_settings: { ...prefs.privacy_settings, anonymize_data: e.target.checked }
+                  })} />
+                <div className="toggle-track" />
+                <div className="toggle-thumb" />
+              </label>
+            </div>
+
+            <div className="settings-row">
+              <div className="settings-row-info">
+                <div className="settings-row-label">Usage Tracking</div>
+                <div className="settings-row-desc">Help improve Subora by sharing anonymous usage data</div>
+              </div>
+              <label className="toggle">
+                <input type="checkbox" 
+                  checked={prefs.privacy_settings.track_usage !== false}
+                  onChange={(e) => savePrefs({
+                    privacy_settings: { ...prefs.privacy_settings, track_usage: e.target.checked }
+                  })} />
                 <div className="toggle-track" />
                 <div className="toggle-thumb" />
               </label>
