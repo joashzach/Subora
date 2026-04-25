@@ -61,7 +61,7 @@ A clean, modern subscription tracking web app that helps users **monitor, analyz
 ## 🔐 Authentication
 
 - Email + password login  
-- OAuth support (Google, Apple)  
+- OAuth support (Google)  
 - JWT-based authentication  
 - Multi-device session support  
 
