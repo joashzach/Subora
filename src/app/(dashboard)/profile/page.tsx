@@ -64,9 +64,9 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '340px 1fr', gap: 24 }}>
+      <div className="profile-layout-grid">
         {/* Avatar card */}
-        <div className="card" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20, padding: 32 }}>
+        <div className="card" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20 }}>
           <div
             className="avatar-upload"
             onClick={() => fileRef.current?.click()}
@@ -131,7 +131,7 @@ export default function ProfilePage() {
               <span className="text-xs text-muted">Email cannot be changed from here</span>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+            <div className="profile-form-grid">
               <div className="form-group">
                 <label className="form-label" htmlFor="profile-currency">Currency</label>
                 <select

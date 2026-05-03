@@ -300,6 +300,7 @@ html {
     gap: 12px; 
     flex-wrap: wrap; 
   }
+  .card { padding: 20px 16px; }
 }
 
 @media (max-width: 480px) {
@@ -311,6 +312,25 @@ html {
   .page-wrapper { padding: 14px 12px 80px; }
   /* Profile two-col form → single col */
   .profile-form-grid { grid-template-columns: 1fr !important; }
+  .profile-layout-grid { grid-template-columns: 1fr !important; }
+}
+
+.profile-layout-grid {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 24px;
+}
+
+.profile-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+@media (max-width: 1024px) {
+  .profile-layout-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 
