@@ -70,7 +70,7 @@ export default function DashboardPage() {
   const upcoming = useMemo(() => active
     .filter((s) => {
       const days = differenceInDays(parseISO(s.next_billing_date), now);
-      return days >= 0 && days <= 30;
+      return days >= 5 && days <= 10;
     })
     .sort((a, b) => a.next_billing_date.localeCompare(b.next_billing_date))
     .slice(0, 5), [active, now]);
@@ -107,7 +107,7 @@ export default function DashboardPage() {
       </div>
 
       {/* ─── Core Metrics ──────────────────────────────── */}
-      <div className="dash-stats" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16, marginBottom: 24 }}>
+      <div className="dash-stats" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 24 }}>
         {/* Monthly Spend — PRIMARY */}
         <div className="stat-card" style={{ gridColumn: '1 / 2', position: 'relative' }}>
           <span className="stat-label">Monthly Spend</span>
@@ -140,20 +140,7 @@ export default function DashboardPage() {
           )}
         </div>
 
-        {/* Active Subscriptions */}
-        <div className="stat-card">
-          <span className="stat-label">Active Subscriptions</span>
-          {loading ? (
-            <div className="skeleton" style={{ height: 36, width: '40%', borderRadius: 8 }} />
-          ) : (
-            <>
-              <div className="stat-value">{maskAmount(String(active.length))}</div>
-              <div className="text-xs text-muted">
-                {subscriptions.filter(s => s.status === 'paused').length} paused · {subscriptions.filter(s => s.status === 'cancelled').length} cancelled
-              </div>
-            </>
-          )}
-        </div>
+
 
         {/* % Change vs Last Month */}
         <div className="stat-card">
@@ -211,7 +198,7 @@ export default function DashboardPage() {
         <div>
           <div className="section-header">
             <h2 className="section-title">Upcoming Payments</h2>
-            <span className="text-xs text-muted">Next 30 days</span>
+            <span className="text-xs text-muted">In 5-10 days</span>
           </div>
 
           <div className="card" style={{ padding: 0 }}>
@@ -231,7 +218,7 @@ export default function DashboardPage() {
             ) : upcoming.length === 0 ? (
               <div className="empty-state" style={{ padding: '40px 20px' }}>
                 <h3 style={{ fontSize: '1rem', marginBottom: 4 }}>No upcoming payments</h3>
-                <p className="text-sm text-muted">No renewals in the next 30 days</p>
+                <p className="text-sm text-muted">No renewals in 5-10 days</p>
               </div>
             ) : (
               <div style={{ padding: '0 16px' }}>
@@ -324,38 +311,6 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* Active Services */}
-          <div>
-            <div className="section-header">
-              <h2 className="section-title">Active Services</h2>
-              <span className="text-xs text-muted">{active.length} services</span>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-              {loading ? (
-                [1, 2, 3].map(i => <div key={i} className="skeleton" style={{ height: 48, borderRadius: 10 }} />)
-              ) : active.length === 0 ? (
-                <div className="empty-state" style={{ padding: '28px 16px' }}>
-                  <p className="text-sm text-muted">No active subscriptions</p>
-                </div>
-              ) : active.slice(0, 5).map((sub) => {
-                return (
-                  <div key={sub.id} style={{
-                    display: 'flex', alignItems: 'center', gap: 10,
-                    background: 'var(--surface)', border: '1px solid var(--border)',
-                    borderRadius: 10, padding: '8px 12px',
-                  }}>
-                    <SubscriptionLogo name={sub.name} logoUrl={sub.logo_url} website={sub.website} color={sub.color} size={30} radius={8} />
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div className="font-semibold truncate" style={{ fontSize: '0.8125rem' }}>{sub.name}</div>
-                    </div>
-                    <div style={{ fontSize: '0.8125rem', fontWeight: 700, color: sub.color }}>
-                      {currencySymbol}{maskAmount(Number(sub.amount).toFixed(2))}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
         </div>
       </div>
 

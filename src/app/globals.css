@@ -295,7 +295,11 @@ html {
   }
 
   /* Subscription list item: hide badge on very small */
-  .sub-list-item { padding: 12px 14px; gap: 10px; }
+  .sub-list-item { 
+    padding: 14px 16px; 
+    gap: 12px; 
+    flex-wrap: wrap; 
+  }
 }
 
 @media (max-width: 480px) {
@@ -734,21 +738,24 @@ html {
 
 /* ─── Subscription Card ───────────────────────────────────────────────────── */
 .sub-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 20px;
+  background: var(--bg);
+  border: 2px solid var(--border);
+  border-radius: 4px;
+  padding: 24px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  transition: var(--transition);
+  gap: 16px;
+  transition: all 0.2s ease;
   position: relative;
   overflow: hidden;
+  box-shadow: 4px 4px 0 var(--border);
 }
 
 .sub-card:hover {
-  border-color: var(--border-strong);
+  border-color: var(--text-primary);
   background: var(--surface-2);
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--text-primary);
 }
 
 .sub-card-header {
@@ -756,6 +763,9 @@ html {
   align-items: flex-start;
   justify-content: space-between;
   gap: 8px;
+  border-bottom: 2px solid var(--border);
+  padding-bottom: 16px;
+  margin-bottom: 4px;
 }
 
 .sub-logo {
@@ -810,19 +820,22 @@ html {
 
 /* Sub list item */
 .sub-list-item {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 14px 18px;
+  background: var(--bg);
+  border: 2px solid var(--border);
+  border-radius: 4px;
+  padding: 16px 20px;
   display: flex;
   align-items: center;
-  gap: 14px;
-  transition: var(--transition);
+  gap: 16px;
+  transition: all 0.2s ease;
+  box-shadow: 3px 3px 0 var(--border);
 }
 
 .sub-list-item:hover {
-  border-color: var(--border-strong);
+  border-color: var(--text-primary);
   background: var(--surface-2);
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0 var(--text-primary);
 }
 
 /* ─── Insight Cards ───────────────────────────────────────────────────────── */

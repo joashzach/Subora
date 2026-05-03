@@ -214,56 +214,56 @@ function SubCard({ sub, currencySymbol, hideAmounts, onEdit, onDelete, onToggle,
     : sub.amount * 4.33;
 
   return (
+  return (
     <div className="sub-card" style={{ '--sub-color': sub.color } as React.CSSProperties}>
       <div className="sub-card-header">
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
           <SubscriptionLogo
             name={sub.name}
             logoUrl={sub.logo_url}
             website={sub.website}
             color={sub.color}
-            size={44}
-            radius={10}
+            size={48}
+            radius={4}
           />
           <div>
-            <div className="sub-name">{sub.name}</div>
-            <div className="sub-category" style={{ color: CATEGORY_COLORS[sub.category] }}>
+            <div className="sub-name" style={{ fontSize: '1.2rem', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 800 }}>{sub.name}</div>
+            <div className="sub-category" style={{ color: 'var(--text-secondary)', fontWeight: 700, letterSpacing: '0.1em' }}>
               {sub.category}
             </div>
           </div>
         </div>
-        <span className={`badge badge-${sub.status}`}>{sub.status}</span>
       </div>
 
       <div>
-        <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
-          <div className="sub-amount" style={{ color: sub.color }}>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginTop: '12px' }}>
+          <div className="sub-amount" style={{ color: 'var(--text-primary)', fontSize: '2rem', fontWeight: 800 }}>
             {currencySymbol}{hideAmounts ? '••••' : Number(sub.amount).toFixed(2)}
           </div>
-          <div className="sub-cycle">/{sub.billing_cycle}</div>
+          <div className="sub-cycle" style={{ fontWeight: 600, color: 'var(--text-secondary)', textTransform: 'uppercase', fontSize: '0.8rem' }}>/{sub.billing_cycle}</div>
         </div>
         {sub.billing_cycle !== 'monthly' && (
-          <div className="text-xs text-muted" style={{ marginTop: 2, fontFamily: 'var(--font-body)' }}>
-            ≈ {currencySymbol}{hideAmounts ? '••••' : monthlyAmount.toFixed(2)}/mo
+          <div className="text-xs" style={{ marginTop: 4, fontFamily: 'var(--font-body)', fontWeight: 600, color: 'var(--text-muted)' }}>
+            ≈ {currencySymbol}{hideAmounts ? '••••' : monthlyAmount.toFixed(2)}/MO
           </div>
         )}
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <div className="sub-renewal">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 'auto', paddingTop: '16px' }}>
+        <div className="sub-renewal" style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)', background: 'var(--surface-2)', padding: '6px 12px', borderRadius: '2px', border: '1px solid var(--border)' }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
             <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
             <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
             <line x1="3" y1="10" x2="21" y2="10"/>
           </svg>
-          {format(parseISO(sub.next_billing_date), 'MMM d, yyyy')}
+          {format(parseISO(sub.next_billing_date), 'MMM d, yyyy').toUpperCase()}
         </div>
-        <div style={{ display: 'flex', gap: 4 }}>
+        <div style={{ display: 'flex', gap: 6 }}>
           <button
             className="btn-icon" onClick={onEdit} title="Edit"
-            style={{ width: 28, height: 28 }}
+            style={{ width: 32, height: 32, borderRadius: '2px', background: 'var(--surface-2)', color: 'var(--text-primary)' }}
           >
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
               <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
             </svg>
@@ -271,24 +271,24 @@ function SubCard({ sub, currencySymbol, hideAmounts, onEdit, onDelete, onToggle,
           <button
             className="btn-icon" onClick={onToggle}
             title={sub.status === 'active' ? 'Pause' : 'Activate'}
-            style={{ width: 28, height: 28 }}
+            style={{ width: 32, height: 32, borderRadius: '2px', background: sub.status === 'active' ? 'var(--surface-2)' : 'var(--text-primary)', color: sub.status === 'active' ? 'var(--text-primary)' : 'var(--bg)' }}
           >
             {sub.status === 'active' ? (
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                 <rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>
               </svg>
             ) : (
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                 <polygon points="5 3 19 12 5 21 5 3"/>
               </svg>
             )}
           </button>
           <button
             className="btn-icon" onClick={onDelete} disabled={deleting}
-            style={{ width: 28, height: 28, color: 'var(--danger)' }}
+            style={{ width: 32, height: 32, borderRadius: '2px', background: 'var(--bg)', border: '2px solid var(--danger)', color: 'var(--danger)' }}
           >
-            {deleting ? <span className="spinner" style={{ width: 12, height: 12 }} /> : (
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            {deleting ? <span className="spinner" style={{ width: 14, height: 14 }} /> : (
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                 <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
                 <path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/>
               </svg>
@@ -311,41 +311,43 @@ function SubListItem({ sub, currencySymbol, hideAmounts, onEdit, onDelete, onTog
         logoUrl={sub.logo_url}
         website={sub.website}
         color={sub.color}
-        size={40}
-        radius={10}
+        size={44}
+        radius={4}
       />
       <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ fontWeight: 700, fontSize: '0.9375rem', fontFamily: 'var(--font-display)', letterSpacing: '-0.01em' }}>{sub.name}</div>
-        <div className="text-xs" style={{ color: CATEGORY_COLORS[sub.category], fontWeight: 600, marginTop: 2 }}>
+        <div style={{ fontWeight: 800, fontSize: '1.1rem', textTransform: 'uppercase', letterSpacing: '0.02em', color: 'var(--text-primary)' }}>{sub.name}</div>
+        <div className="text-xs" style={{ color: 'var(--text-secondary)', fontWeight: 700, marginTop: 4, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
           {sub.category}
-          <span style={{ color: 'var(--text-muted)', fontWeight: 400 }}> · {format(parseISO(sub.next_billing_date), 'MMM d')}</span>
+          <span style={{ color: 'var(--border-strong)', margin: '0 8px' }}>|</span>
+          <span style={{ color: 'var(--text-primary)' }}>RENEWS {format(parseISO(sub.next_billing_date), 'MMM d').toUpperCase()}</span>
         </div>
       </div>
-      <span className={`badge badge-${sub.status}`}>{sub.status}</span>
-      <div style={{ fontWeight: 800, fontSize: '1rem', color: sub.color, minWidth: 80, textAlign: 'right', fontFamily: 'var(--font-display)' }}>
-        {currencySymbol}{hideAmounts ? '••••' : Number(sub.amount).toFixed(2)}
-        <div className="text-xs" style={{ fontWeight: 400, color: 'var(--text-muted)', fontFamily: 'var(--font-body)' }}>/{sub.billing_cycle}</div>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', minWidth: 100 }}>
+        <div style={{ fontWeight: 800, fontSize: '1.25rem', color: 'var(--text-primary)', fontFamily: 'var(--font-display)' }}>
+          {currencySymbol}{hideAmounts ? '••••' : Number(sub.amount).toFixed(2)}
+        </div>
+        <div className="text-xs" style={{ fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase' }}>/{sub.billing_cycle}</div>
       </div>
-      <div style={{ display: 'flex', gap: 4, marginLeft: 8 }}>
-        <button className="btn-icon" onClick={onEdit} style={{ width: 30, height: 30 }} title="Edit">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <div style={{ display: 'flex', gap: 6, marginLeft: 'auto', flexWrap: 'wrap' }}>
+        <button className="btn-icon" onClick={onEdit} style={{ width: 34, height: 34, borderRadius: '2px', background: 'var(--surface-2)', color: 'var(--text-primary)' }} title="Edit">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
             <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
             <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
           </svg>
         </button>
-        <button className="btn-icon" onClick={onToggle} style={{ width: 30, height: 30 }} title={sub.status === 'active' ? 'Pause' : 'Activate'}>
+        <button className="btn-icon" onClick={onToggle} style={{ width: 34, height: 34, borderRadius: '2px', background: sub.status === 'active' ? 'var(--surface-2)' : 'var(--text-primary)', color: sub.status === 'active' ? 'var(--text-primary)' : 'var(--bg)' }} title={sub.status === 'active' ? 'Pause' : 'Activate'}>
           {sub.status === 'active' ? (
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>
             </svg>
           ) : (
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <polygon points="5 3 19 12 5 21 5 3"/>
             </svg>
           )}
         </button>
-        <button className="btn-icon" onClick={onDelete} style={{ width: 30, height: 30, color: 'var(--danger)' }} title="Delete">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <button className="btn-icon" onClick={onDelete} style={{ width: 34, height: 34, borderRadius: '2px', background: 'var(--bg)', border: '2px solid var(--danger)', color: 'var(--danger)' }} title="Delete">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
             <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
             <path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/>
           </svg>
