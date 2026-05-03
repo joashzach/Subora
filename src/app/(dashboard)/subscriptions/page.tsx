@@ -214,7 +214,6 @@ function SubCard({ sub, currencySymbol, hideAmounts, onEdit, onDelete, onToggle,
     : sub.amount * 4.33;
 
   return (
-  return (
     <div className="sub-card" style={{ '--sub-color': sub.color } as React.CSSProperties}>
       <div className="sub-card-header">
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
