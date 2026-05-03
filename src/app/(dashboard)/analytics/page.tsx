@@ -214,7 +214,6 @@ export default function AnalyticsPage() {
         <div className="stat-card">
           <span className="stat-label">Monthly Total</span>
           <div className="stat-value">{currencySymbol}{maskAmount(monthlyTotal.toFixed(2))}</div>
-          <div className="text-xs text-muted">across {active.length} services</div>
         </div>
         <div className="stat-card">
           <span className="stat-label">Annual Projection</span>
