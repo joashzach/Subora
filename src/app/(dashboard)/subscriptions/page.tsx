@@ -222,11 +222,11 @@ function SubCard({ sub, currencySymbol, hideAmounts, onEdit, onDelete, onToggle,
             logoUrl={sub.logo_url}
             website={sub.website}
             color={sub.color}
-            size={48}
+            size={40}
             radius={4}
           />
           <div>
-            <div className="sub-name" style={{ fontSize: '1.2rem', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 800 }}>{sub.name}</div>
+            <div className="sub-name" style={{ fontSize: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 800 }}>{sub.name}</div>
             <div className="sub-category" style={{ color: 'var(--text-secondary)', fontWeight: 700, letterSpacing: '0.1em' }}>
               {sub.category}
             </div>
