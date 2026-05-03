@@ -232,7 +232,7 @@ export default function DashboardPage() {
                       borderBottom: i < upcoming.length - 1 ? '1px solid var(--border)' : 'none',
                     }}>
                       <div style={{ outline: isUrgent ? '1.5px solid var(--danger)' : '1px solid transparent', borderRadius: 11 }}>
-                        <SubscriptionLogo name={sub.name} logoUrl={sub.logo_url} website={sub.website} color={sub.color} size={40} radius={10} />
+                        <SubscriptionLogo name={sub.name} logoUrl={sub.logo_url} website={sub.website} color={sub.color} size={32} radius={8} />
                       </div>
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <div className="font-semibold text-sm">{sub.name}</div>
@@ -292,9 +292,9 @@ export default function DashboardPage() {
                         borderBottom: i < Math.min(transactions.length, 5) - 1 ? '1px solid var(--border)' : 'none',
                       }}>
                         {sub ? (
-                          <SubscriptionLogo name={sub.name} logoUrl={sub.logo_url} website={sub.website} color={sub.color} size={32} radius={8} />
+                          <SubscriptionLogo name={sub.name} logoUrl={sub.logo_url} website={sub.website} color={sub.color} size={24} radius={6} />
                         ) : (
-                          <div style={{ width: 32, height: 32, borderRadius: 8, background: 'var(--surface-2)', flexShrink: 0 }} />
+                          <div style={{ width: 24, height: 24, borderRadius: 6, background: 'var(--surface-2)', flexShrink: 0 }} />
                         )}
                         <div style={{ flex: 1, minWidth: 0 }}>
                           <div className="font-semibold" style={{ fontSize: '0.8125rem' }}>{sub?.name || txn.note || 'Unknown'}</div>
