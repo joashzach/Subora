@@ -258,6 +258,7 @@ function SubCard({ sub, currencySymbol, hideAmounts, onEdit, onDelete, onToggle,
           {format(parseISO(sub.next_billing_date), 'MMM d, yyyy').toUpperCase()}
         </div>
         <div style={{ display: 'flex', gap: 6 }}>
+          <button
             className="btn-icon" onClick={onEdit} title="Edit"
             style={{ width: 28, height: 28, borderRadius: '2px', background: 'var(--surface-2)', color: 'var(--text-primary)' }}
           >
@@ -266,6 +267,7 @@ function SubCard({ sub, currencySymbol, hideAmounts, onEdit, onDelete, onToggle,
               <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
             </svg>
           </button>
+          <button
             className="btn-icon" onClick={onToggle}
             title={sub.status === 'active' ? 'Pause' : 'Activate'}
             style={{ width: 28, height: 28, borderRadius: '2px', background: sub.status === 'active' ? 'var(--surface-2)' : 'var(--text-primary)', color: sub.status === 'active' ? 'var(--text-primary)' : 'var(--bg)' }}
@@ -280,6 +282,7 @@ function SubCard({ sub, currencySymbol, hideAmounts, onEdit, onDelete, onToggle,
               </svg>
             )}
           </button>
+          <button
             className="btn-icon" onClick={onDelete} disabled={deleting}
             style={{ width: 28, height: 28, borderRadius: '2px', background: 'var(--bg)', border: '2px solid var(--danger)', color: 'var(--danger)' }}
           >
